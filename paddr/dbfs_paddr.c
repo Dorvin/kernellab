@@ -27,7 +27,7 @@ static ssize_t read_output(struct file *fp,
         // Get packet struct to communicate
         struct packet *packet_buf = (struct packet*)user_buffer;
         // Get task struct
-        task = pid_task(find_vpid(pid), PIDTYPE_PID);
+        task = pid_task(find_vpid(packet_buf->pid), PIDTYPE_PID);
         // Walk process
         // pgd->p4d->pud->pmd->pte
         pgd_t *pgd = pgd_offset(task->mm, packet_buf->vaddr);
@@ -38,7 +38,7 @@ static ssize_t read_output(struct file *fp,
 
         // Finaly write paddr
         // PA = PFN | PO
-        packet_buf = (pte_pfn(*pte) << 12) | (packet_buf->vaddr & ((1 << 12) - 1));
+        packet_buf->paddr = (pte_pfn(*pte) << 12) | (packet_buf->vaddr & ((1 << 12) - 1));
 
         return 0;
 }
