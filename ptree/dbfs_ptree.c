@@ -25,6 +25,11 @@ static ssize_t write_pid_to_input(struct file *fp,
         // There is no such case that pid input_pid is invalid
         // curr is always not null
         curr = pid_task(find_vpid(input_pid), PIDTYPE_PID);
+        // for debug
+        if(curr == NULL){
+                printk("no such pid %d\n", input_pid);
+                return length;
+        }
         // Tracing process tree from input_pid to init(1) process
         // Clear arrays...
         for(i=0; i < 1000; i++){
