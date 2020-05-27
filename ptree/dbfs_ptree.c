@@ -18,6 +18,7 @@ static ssize_t write_pid_to_input(struct file *fp,
 {
         pid_t input_pid;
         char result_temp[1000];
+        int i;
 
         sscanf(user_buffer, "%u", &input_pid);
         // Find task_struct using input_pid. Hint: pid_task
@@ -26,7 +27,7 @@ static ssize_t write_pid_to_input(struct file *fp,
         curr = pid_task(find_vpid(input_pid), PIDTYPE_PID);
         // Tracing process tree from input_pid to init(1) process
         // Clear arrays...
-        for(int i=0; i < 1000; i++){
+        for(i=0; i < 1000; i++){
                 result[i] = 0;
                 result_temp[i] = 0;
         }
