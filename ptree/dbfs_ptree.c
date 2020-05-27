@@ -8,7 +8,7 @@ MODULE_LICENSE("GPL");
 
 static struct dentry *dir, *inputdir, *ptreedir;
 static struct task_struct *curr;
-static struct debugfs_blob_wrapper result_wrapper;
+static struct debugfs_blob_wrapper *result_wrapper;
 static char* result;
 
 static ssize_t write_pid_to_input(struct file *fp, 
