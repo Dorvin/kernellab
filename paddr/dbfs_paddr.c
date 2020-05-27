@@ -26,15 +26,21 @@ static ssize_t read_output(struct file *fp,
         // Implement read file operation
         // Get packet struct to communicate
         struct packet *packet_buf = (struct packet*)user_buffer;
+        // Pagetalbe offsets
+        pgd_t *pgd;
+        p4d_t *p4d;
+        pud_t *pud;
+        pmd_t *pmd;
+        pte_t *pte;
         // Get task struct
         task = pid_task(find_vpid(packet_buf->pid), PIDTYPE_PID);
         // Walk process
         // pgd->p4d->pud->pmd->pte
-        pgd_t *pgd = pgd_offset(task->mm, packet_buf->vaddr);
-        p4d_t *p4d = p4d_offset(pgd, packet_buf->vaddr);
-        pud_t *pud = pud_offset(p4d, packet_buf->vaddr);
-        pmd_t *pmd = pmd_offset(pud, packet_buf->vaddr);
-        pte_t *pte = pte_offset_kernel(pmd, packet_buf->vaddr);
+        pgd = pgd_offset(task->mm, packet_buf->vaddr);
+        p4d = p4d_offset(pgd, packet_buf->vaddr);
+        pud = pud_offset(p4d, packet_buf->vaddr);
+        pmd = pmd_offset(pud, packet_buf->vaddr);
+        pte = pte_offset_kernel(pmd, packet_buf->vaddr);
 
         // Finaly write paddr
         // PA = PFN | PO
